@@ -14,6 +14,31 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+func isSubtree(root *TreeNode, subRoot *TreeNode) bool {
+	if root == nil {
+		return false
+	}
+	return isEqualTree(root, subRoot) ||
+		isSubtree(root.Left, subRoot) || isSubtree(root.Right, subRoot)
+}
+
+func isEqualTree(a *TreeNode, b *TreeNode) bool {
+	// handle nil cases
+	if a == nil && b == nil {
+		return true
+	}
+
+	if a == nil || b == nil {
+		return false
+	}
+
+	if a.Val != b.Val {
+		return false
+	}
+
+	return isEqualTree(a.Left, b.Left) && isEqualTree(a.Right, b.Right)
+}
+
 func findTilt(root *TreeNode) int {
 	if root == nil {
 		return 0

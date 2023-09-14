@@ -5,6 +5,24 @@ type Node struct {
 	Children []*Node
 }
 
+func preorder(root *Node) []int {
+	out := &[]int{}
+	preorderRecurse(root, out)
+
+	return *out
+}
+
+func preorderRecurse(root *Node, out *[]int) {
+	if root == nil {
+		return
+	}
+
+	*out = append(*out, root.Val)
+	for _, child := range root.Children {
+		preorderRecurse(child, out)
+	}
+}
+
 func maxDepth(node *Node) int {
 	if node == nil {
 		return 0
@@ -20,22 +38,30 @@ func maxDepth(node *Node) int {
 	return depth + 1
 }
 
-func NewTree(nodes []int) {
+func NewTree(nodes []int) *Node {
 	parents := []*Node{}
 	layer := []*Node{}
 	p := 0
+
+	var root *Node
 
 	for _, n := range nodes {
 		lp := len(parents)
 		if n >= 0 {
 			node := &Node{Val: n, Children: []*Node{}}
+			if root == nil {
+				root = node
+			}
 			layer = append(layer, node)
-			if lp > 0 {
+			if p < lp {
 				parent := parents[p]
 				parent.Children = append(parent.Children, node)
 				p++
+			} else {
+				p = 0
+				parents = layer
+				layer = []*Node{}
 			}
-
 		} else {
 			p++
 			if p >= lp {
@@ -45,6 +71,8 @@ func NewTree(nodes []int) {
 			}
 		}
 	}
+
+	return root
 }
 
 func maxDepthRecurse(node *Node) int {
