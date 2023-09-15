@@ -759,18 +759,18 @@ pub fn find_words(words: Vec<String>) -> Vec<String> {
 #[allow(dead_code)]
 pub fn find_relative_ranks(score: Vec<i32>) -> Vec<String> {
     let mut out = vec![String::new(); score.len()];
-    let mut heap  = std::collections::BinaryHeap::new();
+    let mut heap = std::collections::BinaryHeap::new();
     score.into_iter().enumerate()
-        .for_each(|a|heap.push((a.1, a.0)));
+        .for_each(|a| heap.push((a.1, a.0)));
 
     let mut rank = 0;
-    while let Some((_, i)) = heap.pop(){
-        rank+=1;
+    while let Some((_, i)) = heap.pop() {
+        rank += 1;
 
         let rank_name = match rank {
-            1=>"Gold Medal".to_string(),
-            2=>"Silver Medal".to_string(),
-            3=> "Bronze Medal".to_string(),
+            1 => "Gold Medal".to_string(),
+            2 => "Silver Medal".to_string(),
+            3 => "Bronze Medal".to_string(),
             other => other.to_string()
         };
 
@@ -780,18 +780,64 @@ pub fn find_relative_ranks(score: Vec<i32>) -> Vec<String> {
     out
 }
 
-// #[allow(dead_code)]
-// fn toStr<'a>(input: Vec<String>) -> Vec<&'a str>{
-//     input.into_iter()
-//         .map(|s|s.clone().as_str())
-//         .collect()
-// }
+#[allow(dead_code)]
+pub fn find_lhs(nums: Vec<i32>) -> i32 {
+    let mut nums = nums;
+    nums.sort();
+    let len = nums.len();
+    let mut max = 0;
+    let mut mark_in = 0;
+    let mut mark_out = 1;
+    let mut is_first = false;
+    let mut next_in = 1;
+
+    while mark_in < mark_out && mark_out < len {
+        let v1 = nums[mark_in];
+        let v2 = nums[mark_out];
+        let diff = v2 - v1;
+
+        if diff == 0 {
+            is_first = false;
+            mark_out += 1;
+        }else if diff == 1{
+            if !is_first {
+                is_first = true;
+                next_in = mark_out;
+            }
+
+            let spread = mark_out - mark_in + 1;
+            if spread > max {
+                max = spread;
+            }
+            mark_out += 1;
+        }
+
+        else {
+            mark_in = next_in;
+            mark_out = mark_in + 1;
+            next_in = mark_out;
+            is_first = false;
+        }
+    }
+
+    max as i32
+}
+
 
 #[cfg(test)]
 mod test {
     use std::{assert_eq, println, vec};
 
-    use crate::arrays::{contains_duplicate, find_disappeared_numbers, find_disappeared_numbers_in_place, find_greed_satisfaction, find_relative_ranks, find_words, four_sum, four_sum2, intersection, intersection_all, intersection_all2, max_area, max_area2, max_area3, move_zeroes, NumArray, reverse_string, reverse_vowels, reverse_vowels2, third_max, three_sum, three_sum_closest};
+    use crate::arrays::{contains_duplicate, find_disappeared_numbers, find_disappeared_numbers_in_place, find_greed_satisfaction, find_lhs, find_relative_ranks, find_words, four_sum, four_sum2, intersection, intersection_all, intersection_all2, max_area, max_area2, max_area3, move_zeroes, NumArray, reverse_string, reverse_vowels, reverse_vowels2, third_max, three_sum, three_sum_closest};
+
+
+    #[test]
+    fn find_lhs_test(){
+        assert_eq!(5, find_lhs( vec![1,3,2,2,5,2,3,7]));
+        assert_eq!(2, find_lhs( vec![1,2,3,4]));
+        assert_eq!(0, find_lhs( vec![1,1,1,1]));
+    }
+
 
     #[test]
     fn find_relative_ranks_test() {

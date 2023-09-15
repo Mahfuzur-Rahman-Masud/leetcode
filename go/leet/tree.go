@@ -5,6 +5,24 @@ type Node struct {
 	Children []*Node
 }
 
+func postOrder(root *Node) []int {
+	accum := &[]int{}
+	postOrderRecurse(root, accum)
+	return *accum
+}
+
+func postOrderRecurse(node *Node, accum *[]int) {
+	if node == nil {
+		return
+	}
+
+	for _, c := range node.Children {
+		postOrderRecurse(c, accum)
+	}
+
+	*accum = append(*accum, node.Val)
+}
+
 func preorder(root *Node) []int {
 	out := &[]int{}
 	preorderRecurse(root, out)

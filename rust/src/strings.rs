@@ -672,85 +672,82 @@ pub fn check_record(s: String) -> bool {
     true
 }
 
-pub fn reverse_words(s: String) -> String {
-    let mut b = s.into_bytes();
-    let len = b.len();
-    let end = len - 1;
-    let (mut mark_in, mut mark_out) = (0, 1);
+// pub fn reverse_words(s: String) -> String {
+//     let mut b = s.into_bytes();
+//     let len = b.len();
+//     let end = len - 1;
+//     let (mut mark_in, mut mark_out) = (0, 1);
+//
+//     while mark_in < mark_out && mark_out < len {
+//         if b[mark_out] == 32 || mark_out == end {
+//             let (mut mi, mut mo) = (mark_in, mark_out - 1);
+//             if mark_out == end { mo += 1; }
+//
+//             while mi < mo {
+//                 let t = b[mi];
+//                 b[mi] = b[mo];
+//                 b[mo] = t;
+//                 mi += 1;
+//                 mo -= 1;
+//             }
+//
+//
+//             mark_out += 1;
+//             mark_in = mark_out;
+//         }
+//         mark_out += 1;
+//     }
+//
+//     unsafe { String::from_utf8_unchecked(b) }
+// }
 
-    while mark_in < mark_out && mark_out < len {
-        if b[mark_out] == 32 || mark_out == end {
-            let (mut mi, mut mo) = (mark_in, mark_out - 1);
-            if mark_out == end { mo += 1; }
 
-            while mi < mo {
-                let t = b[mi];
-                b[mi] = b[mo];
-                b[mo] = t;
-                mi += 1;
-                mo -= 1;
-            }
-
-
-            mark_out += 1;
-            mark_in = mark_out;
-        }
-        mark_out += 1;
-    }
-
-    unsafe { String::from_utf8_unchecked(b) }
-}
-
-
-#[allow(dead_code)]
-fn reverse_wrd(mut s: String)->String {
-
-    let mut b = unsafe { s.as_bytes_mut() };
-    let mut mark_in =0;
-    let len = b.len();
-
-    let mut rev = |mut mark_in: usize, mut mark_out: usize| {
-        while mark_in < mark_out {
-            b.swap(mark_in, mark_out);
-            mark_in+=1;
-            mark_out+=1;
-        }
-    };
-
-    for mark_out in 1..len{
-        if b[mark_out] == 32{
-            rev(mark_in, mark_out);
-
-            mark_in = mark_out+1;
-        }
-    }
-
-    rev(mark_in, len-1);
-
-    s
-}
+// #[allow(dead_code)]
+// fn reverse_wrd(mut s: String)->String {
+//
+//     let mut b = unsafe { s.as_bytes_mut() };
+//     let mut mark_in =0;
+//     let len = b.len();
+//
+//     let mut rev = |mut mark_in: usize, mut mark_out: usize| {
+//         while mark_in < mark_out {
+//             b.swap(mark_in, mark_out);
+//             mark_in+=1;
+//             mark_out+=1;
+//         }
+//     };
+//
+//     for mark_out in 1..len{
+//         let v = b[mark_out];
+//         if v == 32{
+//             rev(mark_in, mark_out);
+//             mark_in = mark_out+1;
+//         }
+//     }
+//
+//     rev(mark_in, len-1);
+//
+//     s
+// }
 
 
 #[cfg(test)]
 mod test {
     use std::{assert_eq, println};
 
-    use crate::strings::{add_strings, can_construct, check_record, convert, count_segments, detect_capital_use, find_the_difference, find_the_difference_1, first_uniq_char, int_to_roman, int_to_roman2, is_anagram, is_isomorphic, longest_palindrome, longest_palindrome_from_rearrange, repeated_substring_pattern, repeated_substring_pattern_o1, reverse_str, reverse_words, reverse_wrd};
+    use crate::strings::{add_strings, can_construct, check_record, convert, count_segments, detect_capital_use, find_the_difference, find_the_difference_1, first_uniq_char, int_to_roman, int_to_roman2, is_anagram, is_isomorphic, longest_palindrome, longest_palindrome_from_rearrange, repeated_substring_pattern, repeated_substring_pattern_o1, reverse_str};
 
-    #[test]
-    fn reverse_test(){
-        println!("{}", reverse_wrd("".to_string()));
-    }
 
-    #[test]
-    fn reverse_words_test() {
-        assert_eq!("ba", reverse_words("ab".to_string()).as_str());
-        assert_eq!("ba ba", reverse_words("ab ab".to_string()).as_str());
-        assert_eq!("ba b", reverse_words("ab b".to_string()).as_str());
-        assert_eq!("a b", reverse_words("a b".to_string()).as_str());
-        assert_eq!("ax b", reverse_words("xa b".to_string()).as_str());
-        assert_eq!("ax sab", reverse_words("xa bas".to_string()).as_str());
-    }
+
+    // #[test]
+    // fn reverse_words_test() {
+    //     assert_eq!("ba", reverse_words("ab".to_string()).as_str());
+    //     assert_eq!("ba ba", reverse_words("ab ab".to_string()).as_str());
+    //     assert_eq!("ba b", reverse_words("ab b".to_string()).as_str());
+    //     assert_eq!("a b", reverse_words("a b".to_string()).as_str());
+    //     assert_eq!("ax b", reverse_words("xa b".to_string()).as_str());
+    //     assert_eq!("ax sab", reverse_words("xa bas".to_string()).as_str());
+    // }
 
     #[test]
     fn check_records_test() {
