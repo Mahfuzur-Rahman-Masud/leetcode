@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
+
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
     pub val: i32,
@@ -121,7 +122,7 @@ pub fn diameter_of_binary_tree(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
             Some(n) => {
                 let l = max_path_and_v(&n.borrow().left);
                 let r = max_path_and_v(&n.borrow().right);
-                (max(l.0, r.0)+1, max(l.0+r.0, max(l.1,r.1)))
+                (max(l.0, r.0) + 1, max(l.0 + r.0, max(l.1, r.1)))
             }
         }
     }
@@ -137,15 +138,50 @@ pub fn diameter_of_binary_tree2(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
             Some(n) => {
                 let l = max_path_and_v(n.borrow().left.clone());
                 let r = max_path_and_v(n.borrow().right.clone());
-                (max(l.0, r.0)+1, max(l.0+r.0, max(l.1,r.1)))
+                (max(l.0, r.0) + 1, max(l.0 + r.0, max(l.1, r.1)))
             }
         }
     }
     max_path_and_v(root).1
 }
 
+impl Solution {
 
+    #[allow(dead_code)]
+    pub fn tree2str(root: Option<Rc<RefCell<TreeNode>>>) -> String {
+        let root_rc =root.unwrap();
+        let mut node = root_rc.borrow_mut();
 
+        node.val.to_string()
+            + &match (node.left.take(), node.right.take()) {
+            (None, None)=>String::new(),
+            (left, None)=>format!("({})", Self::tree2str(left)),
+            (None, right)=>format!("()({})", Self::tree2str(right)),
+            (left, right)=>format!("({})({})", Self::tree2str(left), Self::tree2str(right))
+        }
+    }
+    #[allow(dead_code)]
+    pub fn tree2str_v0(root: Option<Rc<RefCell<TreeNode>>>) -> String {
+        if root.is_none() { return "".to_string(); }
+        let r = root.unwrap();
+        let mut out = r.borrow().val.to_string();
+        if r.borrow().left.is_some() {
+            out += "(";
+            out += Self::tree2str(r.borrow().left.clone()).as_str();
+            out += ")";
+        } else if r.borrow().right.is_some() {
+            out += "()";
+        }
+
+        if r.borrow().right.is_some() {
+            out += "(";
+            out += Self::tree2str(r.borrow().right.clone()).as_str();
+            out += ")";
+        }
+
+        out
+    }
+}
 
 #[cfg(test)]
 mod test {
@@ -156,7 +192,7 @@ mod test {
     use crate::b_tree::{binary_tree_paths, binary_tree_paths_iter_1, count_nodes, diameter_of_binary_tree, invert_tree, TreeNode};
 
     #[test]
-    fn ref_cell_test(){
+    fn ref_cell_test() {
         let x = Rc::new(RefCell::new(5));
         println!("{:?}", x);
         let y = x.clone();
@@ -175,33 +211,30 @@ mod test {
         // values after modifying y , but both x and y are
         println!("{:?}", x);
         println!("{:?}", y);
-
     }
 
     #[test]
     fn diameter_of_binary_tree_test() {
-        assert_eq!(0,diameter_of_binary_tree(None) );
-        assert_eq!(3,diameter_of_binary_tree(Some(Rc::new(RefCell::new(TreeNode{
-            val:1,
-            right: Some(Rc::new(RefCell::new(TreeNode{val:3, left:None, right:None}))),
-            left: Some(Rc::new(RefCell::new(TreeNode{
-            val:2,
-            right: Some(Rc::new(RefCell::new(TreeNode{val:5, left:None, right:None}))),
-            left: Some(Rc::new(RefCell::new(TreeNode{val:4, left:None, right:None}))),
-        })))
-        })))) );
+        assert_eq!(0, diameter_of_binary_tree(None));
+        assert_eq!(3, diameter_of_binary_tree(Some(Rc::new(RefCell::new(TreeNode {
+            val: 1,
+            right: Some(Rc::new(RefCell::new(TreeNode { val: 3, left: None, right: None }))),
+            left: Some(Rc::new(RefCell::new(TreeNode {
+                val: 2,
+                right: Some(Rc::new(RefCell::new(TreeNode { val: 5, left: None, right: None }))),
+                left: Some(Rc::new(RefCell::new(TreeNode { val: 4, left: None, right: None }))),
+            }))),
+        })))));
 
-        assert_eq!(1,diameter_of_binary_tree(Some(Rc::new(RefCell::new(TreeNode{
-            val:1,
+        assert_eq!(1, diameter_of_binary_tree(Some(Rc::new(RefCell::new(TreeNode {
+            val: 1,
             right: None,
-            left: Some(Rc::new(RefCell::new(TreeNode{
-                val:2,
+            left: Some(Rc::new(RefCell::new(TreeNode {
+                val: 2,
                 right: None,
                 left: None,
-            })))
-        })))) );
-
-
+            }))),
+        })))));
     }
 
     #[test]

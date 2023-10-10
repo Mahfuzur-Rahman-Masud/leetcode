@@ -852,48 +852,183 @@ pub fn find_restaurant(list1: Vec<String>, list2: Vec<String>) -> Vec<String> {
 #[allow(dead_code)]
 pub fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
     let len = flowerbed.len();
-    let end = flowerbed.len()-1;
+    let end = flowerbed.len() - 1;
 
-    let can_plant = |x|{
-        if flowerbed[x] ==1 { return false}
-        if x !=0 && flowerbed[x-1] ==1{return false}
-        if x != end && flowerbed[x+1]==1{return false}
+    let can_plant = |x| {
+        if flowerbed[x] == 1 { return false; }
+        if x != 0 && flowerbed[x - 1] == 1 { return false; }
+        if x != end && flowerbed[x + 1] == 1 { return false; }
         true
     };
 
-    let mut count=0;
+    let mut count = 0;
     let mut i = 0;
     while i < len {
-
-        if can_plant(i){
-            count+=1;
-            if count == n{
-                return true
+        if can_plant(i) {
+            count += 1;
+            if count == n {
+                return true;
             }
 
-            i+=2;
-        }else{
-            i+=1;
+            i += 2;
+        } else {
+            i += 1;
         }
     }
 
-    count >=n
+    count >= n
 }
+
+
+#[allow(dead_code)]
+pub fn maximum_product(nums: Vec<i32>) -> i32 {
+    let mut nums = nums;
+    let end = nums.len() - 1;
+
+    nums.sort_by(|a, b| {
+        return b.cmp(a);
+    });
+
+    if nums[0] < 0 {
+        return nums[0] * nums[1] * nums[2];
+    }
+
+    let m2 = nums[end] * nums[end - 1];
+    let m3 = nums[1] * nums[2];
+
+    nums[0] * core::cmp::max(m2, m3)
+}
+
+
+#[allow(dead_code)]
+pub fn find_max_average_old(nums: Vec<i32>, k: i32) -> f64 {
+    let k = k as usize;
+    let mut i = k  -1;
+    let mut max = f64::MIN;
+    let len = nums.len();
+
+
+    while i < len{
+        if i >= k && nums[i] < nums[i-k]{
+            i+=1;
+            continue
+        }
+
+        let mut sum = 0;
+        for j in 0..k {
+           sum+= nums[i-j];
+        }
+
+        let avg = sum as f64 /k as f64;
+        if avg > max{
+            max = avg
+        }
+        i+=1
+    }
+
+
+    max
+}
+
+
+#[allow(dead_code)]
+pub fn find_max_average(nums: Vec<i32>, k: i32) -> f64{
+    nums.windows(k as usize)
+        .map(|w|w.iter().sum::<i32>())
+        .max()
+        .unwrap() as f64 / k as f64
+}
+
+#[allow(dead_code)]
+pub fn find_error_nums(nums: Vec<i32>) -> Vec<i32> {
+    let mut contains = vec![false; nums.len()];
+    let mut out = vec![0, 2];
+
+    for n in nums{
+        let i = n as usize -1;
+        if contains[i]{
+            out[0] = n;
+        }else{
+            contains[i] = true
+        }
+    }
+
+    let miss = contains.into_iter().enumerate()
+        .filter(|(_, v)|v==&false)
+        .find_map(|(i, _)|Some(i as i32 +1))
+        .unwrap();
+
+    out[1] = miss;
+
+
+    out
+}
+
+
+#[allow(dead_code)]
+pub fn find_length_of_lcis(nums: Vec<i32>) -> i32 {
+    if nums.len() == 0 {
+        return 0
+    }
+
+    let mut prev = nums[0]-1;
+    let mut count = 0;
+    let mut max = 0;
+
+    for n in nums{
+        if n > prev{
+            count+=1;
+            if count > max{
+                 max = count;
+            }
+        } else{
+            count = 1;
+        }
+
+        prev = n;
+    }
+
+    max
+}
+
+
 
 #[cfg(test)]
 mod test {
     use std::{assert_eq, println, vec};
 
-    use crate::arrays::{can_place_flowers, contains_duplicate, find_disappeared_numbers, find_disappeared_numbers_in_place, find_greed_satisfaction, find_lhs, find_relative_ranks, find_restaurant, find_words, four_sum, four_sum2, intersection, intersection_all, intersection_all2, max_area, max_area2, max_area3, move_zeroes, NumArray, reverse_string, reverse_vowels, reverse_vowels2, third_max, three_sum, three_sum_closest};
+    use crate::arrays::{can_place_flowers, contains_duplicate, find_disappeared_numbers, find_disappeared_numbers_in_place, find_error_nums, find_greed_satisfaction, find_length_of_lcis, find_lhs, find_max_average, find_max_average_old, find_relative_ranks, find_restaurant, find_words, four_sum, four_sum2, intersection, intersection_all, intersection_all2, max_area, max_area2, max_area3, move_zeroes, NumArray, reverse_string, reverse_vowels, reverse_vowels2, third_max, three_sum, three_sum_closest};
+
+
+
 
     #[test]
-    fn can_place_flower_test(){
-        assert!(can_place_flowers( vec![1,0,0,0,1], 1));
-        assert!(!can_place_flowers(vec![1,0,0,0,1], 2));
-        assert!(!can_place_flowers(vec![0,0,1,0,1], 2));
-        assert!(can_place_flowers(vec![0,0,1,0,1], 1));
-        assert!(can_place_flowers(vec![0,0,1,0,0], 2));
-        assert!(!can_place_flowers(vec![1,0,0,0,0,1], 2));
+    fn find_length_of_lcis_test(){
+        assert_eq!(3, find_length_of_lcis(vec![1,3,5,4,7]));
+        assert_eq!(1, find_length_of_lcis(vec![2,2,2,2,2]));
+        assert_eq!(2, find_length_of_lcis(vec![2,2,1,2,2]));
+        assert_eq!(3, find_length_of_lcis(vec![2,2,1,2,3,2]));
+        assert_eq!(3, find_length_of_lcis(vec![2,2,1,2,10,2]));
+    }
+
+    #[test]
+    fn find_error_nums_test(){
+        assert_eq!(vec![2,3] , find_error_nums(vec![1,2,2,4]));
+        assert_eq!(vec![1,2] , find_error_nums(vec![1,1]));
+    }
+    #[test]
+    fn find_max_average_test(){
+        assert_eq!(12.75000, find_max_average_old(vec![1,12,-5,-6,50,3],  4));
+        assert_eq!(12.75000, find_max_average(vec![1,12,-5,-6,50,3],  4));
+    }
+    #[test]
+    fn can_place_flower_test() {
+        assert!(can_place_flowers(vec![1, 0, 0, 0, 1], 1));
+        assert!(!can_place_flowers(vec![1, 0, 0, 0, 1], 2));
+        assert!(!can_place_flowers(vec![0, 0, 1, 0, 1], 2));
+        assert!(can_place_flowers(vec![0, 0, 1, 0, 1], 1));
+        assert!(can_place_flowers(vec![0, 0, 1, 0, 0], 2));
+        assert!(!can_place_flowers(vec![1, 0, 0, 0, 0, 1], 2));
     }
 
     #[test]
@@ -902,9 +1037,9 @@ mod test {
             vec!["Shogun".to_string(), "Tapioca Express".to_string(), "Burger King".to_string(), "KFC".to_string()],
             vec!["Piatti".to_string(), "The Grill at Torrey Pines".to_string(), "Hungry Hunter Steakhouse".to_string(), "Shogun".to_string()]));
 
-        assert_eq!(vec!["Shogun".to_string()], find_restaurant(vec!["Shogun".to_string(),"Tapioca Express".to_string(),"Burger King".to_string(),"KFC".to_string()], vec!["KFC".to_string(),"Shogun".to_string(),"Burger King".to_string()]));
+        assert_eq!(vec!["Shogun".to_string()], find_restaurant(vec!["Shogun".to_string(), "Tapioca Express".to_string(), "Burger King".to_string(), "KFC".to_string()], vec!["KFC".to_string(), "Shogun".to_string(), "Burger King".to_string()]));
 
-        assert_eq!(vec!["sad".to_string(),"happy".to_string()], find_restaurant(vec!["happy".to_string(),"sad".to_string(),"good".to_string()], vec!["sad".to_string(),"happy".to_string(),"good".to_string()]));
+        assert_eq!(vec!["sad".to_string(), "happy".to_string()], find_restaurant(vec!["happy".to_string(), "sad".to_string(), "good".to_string()], vec!["sad".to_string(), "happy".to_string(), "good".to_string()]));
     }
 
     #[test]
