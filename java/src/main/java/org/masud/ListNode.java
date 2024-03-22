@@ -1,6 +1,8 @@
 package org.masud;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -34,6 +36,38 @@ public class ListNode {
     return Objects.hash(val, next);
   }
 
+
+  public static ListNode mergeInBetween(ListNode list1, int a, int b, ListNode list2){
+    ListNode l1 = list1;
+    ListNode tail = null;
+    a--;
+    b++;
+    int i=0;
+    while (l1 != null){
+      if (i == a) {
+        ListNode temp = l1.next;
+        l1.next = list2;
+        l1 = temp;
+        i++;
+        continue;
+      }
+
+      if (i == b) {
+        tail = l1;
+        break;
+      }
+
+      l1 = l1.next;
+      i++;
+    }
+
+    while (list2.next != null){
+      list2 = list2.next;
+    }
+
+    list2.next = tail;
+    return list1;
+  }
 
   public static boolean isPalindrome2(ListNode head) {
     if (head == null) {
@@ -148,7 +182,14 @@ public class ListNode {
 
   @Override
   public String toString() {
-    return val + (next == null ? "" : ", " + next);
+    ListNode node = this;
+    List<String> list = new ArrayList<>();
+    while (node != null){
+      list.add(node.val + "");
+      node = node.next;
+    }
+
+    return "[" + String.join(", ", list) + "]";
   }
 
 

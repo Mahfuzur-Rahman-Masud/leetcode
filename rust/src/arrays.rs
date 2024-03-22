@@ -1038,7 +1038,6 @@ mod test {
             vec!["Piatti".to_string(), "The Grill at Torrey Pines".to_string(), "Hungry Hunter Steakhouse".to_string(), "Shogun".to_string()]));
 
         assert_eq!(vec!["Shogun".to_string()], find_restaurant(vec!["Shogun".to_string(), "Tapioca Express".to_string(), "Burger King".to_string(), "KFC".to_string()], vec!["KFC".to_string(), "Shogun".to_string(), "Burger King".to_string()]));
-
         assert_eq!(vec!["sad".to_string(), "happy".to_string()], find_restaurant(vec!["happy".to_string(), "sad".to_string(), "good".to_string()], vec!["sad".to_string(), "happy".to_string(), "good".to_string()]));
     }
 

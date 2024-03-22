@@ -778,7 +778,6 @@ pub fn valid_palindrome(s: String) -> bool {
                 right -= 1;
                 continue;
             }
-
         }
 
         left+=1;

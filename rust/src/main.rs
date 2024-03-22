@@ -16,6 +16,8 @@ mod stack;
 mod queue;
 mod api;
 mod combinations;
+mod mix;
+mod matrix;
 
 
 // async fn hello() -> impl Responder {
