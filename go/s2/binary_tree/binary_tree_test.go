@@ -1,11 +1,14 @@
 package binarytree
 
 import (
-	"fmt"
 	"testing"
 )
 
 func TestIsSameTree(t *testing.T) {
-	b := IsSameTree(BreadthFirstTree(4, 2, 7, 1, 3), Make(4, 2, 7, 1, 3))
-	fmt.Println(b)
+	bf := BreadthFirstTree(4, 2, 7, 1, 3)
+	PrintTree(bf)
+
+	// b := T2N(bf)
+	// PrintBN(b)
+	// fmt.Println("x2")
 }

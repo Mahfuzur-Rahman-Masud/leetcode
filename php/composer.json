@@ -1,0 +1,17 @@
+{
+    "name": "rahman/php",
+    "autoload": {
+        "psr-4": {
+            "Rahman\\Php\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mahfuzur Rahman",
+            "email": "mahfuzur_rahman_masud@outlook.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    }
+}
